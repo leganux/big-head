@@ -1,0 +1,29 @@
+{
+  "name": "big-head",
+  "version": "1.0.0",
+  "description": "A control panel generator for APIed-Piper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leganux/big-head.git"
+  },
+  "keywords": [
+    "leganux",
+    "api",
+    "rest",
+    "develop",
+    "web",
+    "apied-piper",
+    "big-head",
+    "code-rag"
+  ],
+  "author": "Angel Erick Cruz Olivera - leganux",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/leganux/big-head/issues"
+  },
+  "homepage": "https://github.com/leganux/big-head#readme"
+}
