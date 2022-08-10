@@ -1,0 +1,36 @@
+#new_edit.modal
+    .modal-dialog
+        .modal-content
+            // Modal Header
+            .modal-header
+                h4.modal-title New / Edit !{pagename}
+                button.close(type='button' data-dismiss='modal') &times;
+            // Modal body
+            .modal-body
+                each val in fields
+                    label.text-capitalize !{val.name}
+
+                    if(val.type == 'number')
+                        input.form-control(type=val.type id="f_" + val.name placeholder=val.name)
+                    if(val.type == 'string')
+                        input.form-control(type="text" id="f_" + val.name placeholder=val.name)
+                    if(val.type == 'oid')
+                        br
+                        select.form-control( id="f_" + val.name )
+                        br
+                    if(val.type == 'array_oid')
+                        br
+                        select.form-control( id="f_" + val.name multiple )
+                        br
+                    if(val.type == 'any')
+                        textarea.form-control( rows="5" id="f_" + val.name placeholder=val.name)
+                    if(val.type == 'boolean')
+                        br
+                        input(type="checkbox" id="f_" + val.name)
+
+
+
+            // Modal footer
+            .modal-footer
+                button.btn.btn-primary.text-success#save Save
+                button.btn.btn-primary.text-danger(type='button' data-dismiss='modal') Close

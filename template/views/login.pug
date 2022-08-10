@@ -22,27 +22,27 @@ main
                             h2.h4 Sign in to Big-Head Control Panel
                             img.img-fluid.rounded(src="/public/images/cabezon.jpg")
                         .card-body
-                            form.mt-4(action='#')
+                            .mt-4
 
                                 .form-group
-                                    label(for='exampleInputIcon3') Your user
+                                    label(for='user') Your user
                                     .input-group.mb-4
                                         .input-group-prepend
                                             span.input-group-text
                                                 span.fas.fa-user-alt
-                                        input#exampleInputIcon3.form-control(placeholder='user' type='text' aria-label='user')
+                                        input#user.form-control(placeholder='user' type='text' aria-label='user')
 
                                 .form-group
 
                                     .form-group
-                                        label(for='exampleInputPassword6') Password
+                                        label(for='pass') Password
                                         .input-group.mb-4
                                             .input-group-prepend
                                                 span.input-group-text
                                                     span.fas.fa-unlock-alt
-                                            input#exampleInputPassword6.form-control(placeholder='Password' type='password' aria-label='Password' required='')
+                                            input#pass.form-control(placeholder='Password' type='password' aria-label='Password' required='')
 
-                                button.btn.btn-block.btn-primary(type='submit') Sign in
+                                button.btn.btn-block.btn-primary#login Sign in
                                 center
                                     | Leganux (c) 2021-2022 All rights reserved
                                     br
@@ -53,5 +53,13 @@ main
 // Core
 each val in Assets.js
     script(src=val)
+script(src='/public/core/common.js')
+script(src='/public/core/login.js')
+script.
+    let URI = "!{params.uri}"
+    let api_url_base = "!{params.api_url_base}"
+    let api_base_path = "!{params.api_base_path}"
+
+
 
 

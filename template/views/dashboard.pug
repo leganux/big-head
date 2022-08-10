@@ -1,0 +1,110 @@
+doctype html
+head
+    meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+
+    title Big-Head UI - Dashboard
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='title' content='Big-Head UI - Dashboard')
+    meta(name='author' content='Angel Erick Cruz')
+    link(rel='canonical' href='https://leganux.com')
+    each val in Assets.css
+        link(type='text/css' href=val rel='stylesheet')
+
+
+body
+    include ./template/head
+    br
+    br
+
+    br
+    br
+    br
+    .container-fluid
+        .row
+            .col-12
+                .card.bg-primary.shadow-soft.border-light
+                    .card-header.border-light
+                        h3 Dashboard
+                    .card-body.border-light
+                        .row
+                            .col-12.col-md-4
+                                .card.bg-primary.shadow-inset.border-light
+                                    .card-body
+                                        .row
+                                            .col-6
+                                                center
+                                                    i.fas.fa-memory.fa-5x
+                                            .col-6
+
+                                                p#txtmem
+                                                    img.img-fluid(src="/public/images/loading.gif")
+
+                            .col-12.col-md-4
+                                .card.bg-primary.shadow-inset.border-light
+                                    .card-body
+                                        .row
+                                            .col-6
+                                                center
+                                                    i.fas.fa-microchip.fa-5x
+                                            .col-6
+
+                                                p#txtdisk
+                                                    img.img-fluid(src="/public/images/loading.gif")
+                            .col-12.col-md-4
+                                .card.bg-primary.shadow-inset.border-light
+                                    .card-body
+                                        .row
+                                            .col-6
+                                                center
+                                                    i.fas.fa-hdd.fa-5x
+                                            .col-6
+
+                                                p#txtcpu
+                                                    img.img-fluid(src="/public/images/loading.gif")
+                        br
+                        .row
+                            .col-12.col-md-6
+                                .card.bg-primary.shadow-inset.border-light
+                                    .card-body
+                                        .row
+                                            .col-6
+                                                center
+                                                    i.fas.fa-database.fa-5x
+                                            .col-6
+
+                                                p#txtdb
+                                                    img.img-fluid(src="/public/images/loading.gif")
+                            .col-12.col-md-6
+                                .card.bg-primary.shadow-inset.border-light
+                                    .card-body
+                                        .row
+                                            .col-6
+                                                center
+                                                    i.fas.fa-home.fa-5x
+                                            .col-6
+
+                                                p#txtos
+                                                    img.img-fluid(src="/public/images/loading.gif")
+                    .card-footer.border-light
+
+                        center
+                            img.img-fluid(src="https://leganux.net/web/wp-content/uploads/2020/01/circullogo.png" width="50px")
+                            | &copy; 2021 -2022
+                            a(href="https://leganux.net")  Leganux
+                            | All Rigths reserved
+
+
+
+// Core
+each val in Assets.js
+    script(src=val)
+script(src='/public/core/common.js')
+script(src='/public/core/dashboard.js')
+script.
+    let URI = "!{params.uri}"
+    let api_url_base = "!{params.api_url_base}"
+    let api_base_path = "!{params.api_base_path}"
+
+
+
+

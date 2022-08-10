@@ -1,0 +1,72 @@
+nav#navbar-main.navbar.navbar-main.navbar-expand-lg.navbar-theme-primary.navbar-light
+    .container
+        a.navbar-brand.shadow-soft.py-2.px-3.rounded.border.border-light.mr-lg-4(href='/dashboard')
+            img.navbar-brand-dark(src='/public/images/cabezon.jpg' alt='Logo light')
+
+            img.navbar-brand-light(src='/public/images/cabezon.jpg' alt='Logo dark')
+            | &nbsp; Big-Head
+        #navbar_global.navbar-collapse.collapse
+            .navbar-collapse-header
+                .row
+                    .col-6.collapse-brand
+                        a.navbar-brand.shadow-soft.py-2.px-3.rounded.border.border-light(href='../../index.html')
+                            img(src='../../assets/img/brand/dark.svg' alt='Themesberg logo')
+                    .col-6.collapse-close
+                        a.fas.fa-times(href='#navbar_global' data-toggle='collapse' data-target='#navbar_global' aria-controls='navbar_global' aria-expanded='false' title='close' aria-label='Toggle navigation')
+            ul.navbar-nav.navbar-nav-hover.align-items-lg-center
+                li.nav-item.dropdown
+                    a.nav-link(href='#' data-toggle='dropdown')
+                        span.nav-link-inner-text Control Pages
+                        span.fas.fa-angle-down.nav-link-arrow.ml-2
+                    ul.dropdown-menu
+                        each val in Menu
+                            li
+                                a.dropdown-item(href="/page/" + val) !{val}
+
+
+                li.nav-item.dropdown
+                    a.nav-link(href='#' data-toggle='dropdown')
+                        span.nav-link-inner-text SV-projects
+                        span.fas.fa-angle-down.nav-link-arrow.ml-2
+                    .dropdown-menu.dropdown-menu-lg
+                        .col-auto.px-0(data-dropdown-content='')
+                            .list-group.list-group-flush
+                                a.list-group-item.list-group-item-action.d-flex.align-items-center.p-0.py-3.px-lg-4(href='https://www.npmjs.com/package/code-rag-sdk' target='_blank')
+                                    span.icon.icon-sm.icon-secondary
+                                        span.fas.fa-file-alt
+                                    .ml-4
+                                        span.text-dark.d-block
+                                            | code-rag-sdk
+                                            span.badge.badge-sm.badge-secondary.ml-2
+                                        span.small The sdk for APIed-Piper
+                                a.list-group-item.list-group-item-action.d-flex.align-items-center.p-0.py-3.px-lg-4(href='https://www.npmjs.com/package/apied-piper' target='_blank')
+                                    span.icon.icon-sm.icon-secondary
+                                        span.fas.fa-file-alt
+                                    .ml-4
+                                        span.text-dark.d-block APIed Piper
+                                        span.small A minute microservice API rest generator
+                                a.list-group-item.list-group-item-action.d-flex.align-items-center.p-0.py-3.px-lg-4(href='https://www.npmjs.com/package/hooli-logger-client' target='_blank')
+                                    span.icon.icon-sm.icon-secondary
+                                        span.fas.fa-file-alt
+                                    .ml-4
+                                        span.text-dark.d-block Hooli-Logger
+                                        span.small A simple log aggregator tool for nodejs / express projects.
+                                a.list-group-item.list-group-item-action.d-flex.align-items-center.p-0.py-3.px-lg-4(href='https://www.npmjs.com/package/apiato' target='_blank')
+                                    span.icon.icon-sm.icon-secondary
+                                        span.fas.fa-file-alt
+                                    .ml-4
+                                        span.text-dark.d-block Apiato
+                                        span.small An amazing CRUD API generator for Express and Mongoose.
+        .d-flex.align-items-center
+            a.btn.btn-primary.text-secondary.d-none.d-md-inline-block.mr-3(href='#' )#closeSession
+                i.far.fa-times-circle.mr-2
+                |  Logout
+            a.btn.btn-primary.text-secondary.d-none.d-md-inline-block.mr-3(href='https://leganux.net' target='_blank')
+                img.img-fluid(src="https://leganux.net/web/wp-content/uploads/2020/01/circullogo.png" width="30px")
+                |  Leganux.com
+
+            a.btn.btn-primary(href='https://github.com/leganux/big-head' target='_blank')
+                i.fas.fa-book
+                |  Read Docs
+            button.navbar-toggler.ml-2(type='button' data-toggle='collapse' data-target='#navbar_global' aria-controls='navbar_global' aria-expanded='false' aria-label='Toggle navigation')
+                span.navbar-toggler-icon

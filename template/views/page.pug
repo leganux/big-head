@@ -1,0 +1,68 @@
+doctype html
+head
+    meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+
+    title Big-Head UI - !{pagename}
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='title' content='Big-Head UI - ' + pagename)
+    meta(name='author' content='Angel Erick Cruz')
+    link(rel='canonical' href='https://leganux.com')
+    each val in Assets.css
+        link(type='text/css' href=val rel='stylesheet')
+
+
+body
+    include ./template/head
+    br
+    br
+
+    br
+    br
+    br
+    .container-fluid
+        .row
+            .col-12
+                .card.bg-primary.shadow-soft.border-light
+                    .card-header.border-light
+                        h3 !{pagename}
+                    .card-body.border-light
+                        br
+                        button.btn.btn-primary.text-success.btn-lg#new New
+                        br
+                        br
+                        table.table.table-bordered.table-striped.display.table-hover#datatable
+                            thead
+                                tr
+                                    th.text-capitalize ID
+                                    each val in fields
+                                        th.text-capitalize !{val.name}
+                                    th.text-capitalize Actions
+
+
+
+
+
+                    .card-footer.border-light
+
+                        center
+                            img.img-fluid(src="https://leganux.net/web/wp-content/uploads/2020/01/circullogo.png" width="50px")
+                            | &copy; 2021 -2022
+                            a(href="https://leganux.net")  Leganux
+                            | All Rigths reserved
+    include template/modal
+
+// Core
+each val in Assets.js
+    script(src=val)
+script(src='/public/core/common.js')
+script(src='/public/core/page.js')
+script.
+    let URI = "!{params.uri}"
+    let api_url_base = "!{params.api_url_base}"
+    let api_base_path = "!{params.api_base_path}"
+    let pagename = "!{params.pagename}"
+    let fields = JSON.parse('!{params.fields}')
+
+
+
+

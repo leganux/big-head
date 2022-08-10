@@ -25,15 +25,63 @@ let processRoutes = function (Routes) {
 }
 let {Menu, Definitions} = processRoutes(Routes)
 
-console.log('RRRRR  ', Menu, Definitions)
-
 
 router.get('/', function (req, res) {
     res.status(200).render('login', {
         Assets,
         Global,
         Menu,
-        Definitions
+        Definitions,
+        params: {
+            uri: Global.api_url_base + Global.api_base_path,
+            api_url_base: Global.api_url_base,
+            api_base_path: Global.api_base_path,
+        }
+
+    })
+})
+
+router.get('/dashboard', function (req, res) {
+    res.status(200).render('dashboard', {
+        Assets,
+        Global,
+        Menu,
+        Definitions,
+        params: {
+            uri: Global.api_url_base + Global.api_base_path,
+            api_url_base: Global.api_url_base,
+            api_base_path: Global.api_base_path,
+        }
+
+    })
+})
+
+router.get('/page/:pagename', function (req, res) {
+    let {pagename} = req.params;
+
+    let arr = []
+
+    for (var [key, value] of Object.entries(Routes[pagename].definition)) {
+        let inner = value
+        inner.name = key
+        arr.push(inner)
+    }
+
+    res.status(200).render('page', {
+        Assets,
+        Global,
+        Menu,
+        Definitions,
+        pagename,
+        fields: arr,
+        params: {
+            uri: Global.api_url_base + Global.api_base_path,
+            api_url_base: Global.api_url_base,
+            api_base_path: Global.api_base_path,
+            fields: JSON.stringify(arr),
+            pagename
+        }
+
     })
 })
 
