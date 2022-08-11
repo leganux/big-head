@@ -64,6 +64,7 @@ $(document).ready(async function () {
                 let rel = await WS.setResource(item.rel).getMany()
                 reviewSession(rel)
                 if (rel.success) {
+                    $('#f_' + item.name).html('')
                     for (let jtem of rel.data) {
                         $('#f_' + item.name).append('<option value="' + jtem._id + '">' + JSON.stringify(jtem) + '</option>')
                     }
@@ -71,6 +72,8 @@ $(document).ready(async function () {
                         placeholder: 'Select an option ok ' + item.name,
                         width: "100%"
                     })
+                    $('#f_' + item.name).val('')
+                    $('#f_' + item.name).trigger('change')
                 }
 
             }
@@ -100,16 +103,22 @@ $(document).ready(async function () {
                 body[item.name] = $('#f_' + item.name).prop('checked')
             }
         }
+
+        let response = {}
+
         if (UPDATE == '') {
-            await WS.setResource(pagename).createOne(body)
+            response = await WS.setResource(pagename).createOne(body)
         } else {
-            await WS.setResource(pagename).updateById(UPDATE, body)
+            response = await WS.setResource(pagename).updateById(UPDATE, body)
         }
-        DT.draw()
+        if (response.success) {
+            DT.draw()
+            $('#new_edit').modal('hide')
+            UPDATE = ''
+        } else {
+            alert(response.error)
+        }
 
-
-        $('#new_edit').modal('hide')
-        UPDATE = ''
     })
 
     $(document.body).on('click', '.delete_element', async function () {
@@ -134,7 +143,7 @@ $(document).ready(async function () {
                         $('#f_' + item.name).val(data.data[item.name])
                     }
                     if (item.type == 'oid') {
-                        $('#f_' + item.name).val(data.data[item.name])
+                        $('#f_' + item.name).val(data.data[item.name]._id)
                         $('#f_' + item.name).trigger('change');
                     }
                     if (item.type == 'array_oid') {

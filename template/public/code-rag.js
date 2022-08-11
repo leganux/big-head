@@ -427,7 +427,7 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
         }
         try {
             return {
-                url: el.furi + el.resource + '/datatable/',
+                url: el.furi + el.resource + '/datatable/?populate=true',
                 type: "POST",
                 "dataType": 'json',
                 "beforeSend": function (xhr) {

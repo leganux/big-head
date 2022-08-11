@@ -1,5 +1,5 @@
 module.exports = {
-    kindOfClassmate: {
+    category: {
         operation: {
             all: true
         },
@@ -10,12 +10,17 @@ module.exports = {
             },
             active: {
                 type: 'boolean',
-                mandatory: true
+                mandatory: true,
+                default: false
+            },
+            key: {
+                type: 'number',
+
             },
         },
         datatable_search_fields: ['name'],
     },
-    classmate: {
+    type: {
         operation: {
             all: true
         },
@@ -24,31 +29,21 @@ module.exports = {
                 type: 'string',
                 mandatory: true
             },
-            age: {
+            active: {
+                type: 'boolean',
+                mandatory: true,
+                default: false
+            },
+            key: {
                 type: 'number',
-                mandatory: true
-            },
-            kind: {
-                type: 'oid',
-                rel: 'kindOfClassmate'
-            },
-            moreInfo: {
-                type: 'any',
+
             },
         },
-        datatable_search_fields: ['name']
+        datatable_search_fields: ['name'],
     },
-    classRoom: {
+    product: {
         operation: {
-            createOne: true,
-            createMany: true,
-            getMany: true,
-            getOneById: true,
-            getOneWhere: true,
-            findUpdateOrCreate: true,
-            findUpdate: true,
-            updateById: true,
-            findIdAndDelete: true,
+            all: true
         },
         definition: {
             name: {
@@ -57,21 +52,26 @@ module.exports = {
             },
             description: {
                 type: 'string',
-                mandatory: true
+
             },
-            isOpen: {
-                type: 'boolean',
-            },
-            position: {
+            count: {
                 type: 'number',
+                mandatory: true,
+                default: 0
             },
+            type: {
+                type: 'oid',
+                rel: 'type'
+            },
+            category: {
+                type: 'oid',
+                rel: 'category'
+            },
+            moreInfo: {
+                type: 'any',
+            },
+        },
+        datatable_search_fields: ['name']
+    },
 
-            classmates: {
-                type: 'array_oid',
-                rel: 'classmate'
-            }
-
-        }
-    }
 }
-
