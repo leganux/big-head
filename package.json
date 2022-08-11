@@ -25,5 +25,13 @@
   "bugs": {
     "url": "https://github.com/leganux/big-head/issues"
   },
-  "homepage": "https://github.com/leganux/big-head#readme"
+  "homepage": "https://github.com/leganux/big-head#readme",
+  "dependencies": {
+    "code-rag-sdk": "^1.0.5",
+    "commander": "^9.4.0",
+    "make-dir": "^3.1.0"
+  },
+  "bin": {
+    "bighead": "./index.js"
+  }
 }
