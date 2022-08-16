@@ -7,12 +7,13 @@ const fs = require('fs')
 const makeDir = require('make-dir');
 const codeRagSdk = require('code-rag-sdk')
 const {exec} = require("child_process");
+const {def} = require("./template/public/pdfmake/pdfmake");
 
 
-var copyRecursiveSync = function (src, dest) {
-    var exists = fs.existsSync(src);
-    var stats = exists && fs.statSync(src);
-    var isDirectory = exists && stats.isDirectory();
+let copyRecursiveSync = function (src, dest) {
+    let exists = fs.existsSync(src);
+    let stats = exists && fs.statSync(src);
+    let isDirectory = exists && stats.isDirectory();
     if (isDirectory) {
         fs.mkdirSync(dest);
         fs.readdirSync(src).forEach(function (childItemName) {
@@ -25,7 +26,7 @@ var copyRecursiveSync = function (src, dest) {
 };
 
 program
-    .command('new')
+    .command('console')
     .description('Creates new project of Big-Head based on template')
     .option('-d, --definition <definition...>', 'The full file folder and path of definition JSON. Mandatory ** ')
     .option('-l, --location <location...>', 'The full file folder and path where the project will be created. Default: ./  ')
@@ -115,7 +116,7 @@ Welcome to
                 'Step 3 - Copying files....'
             )
 
-            copyRecursiveSync(path.resolve(__dirname, 'template'), path.resolve(location, 'Big-Head'))
+            copyRecursiveSync(path.resolve(__dirname, 'template'), path.resolve(location, 'Big-Head-Console'))
 
             console.log(
                 'Step 4 - Creating config files....'
@@ -127,18 +128,150 @@ Welcome to
                             api_base_path: '${base}',
                         }`
 
-            let routes = `   
-            const path = require("path");
-            module.exports = require(path.resolve('${definition}'))`
+            let routes = require(path.resolve(definition[0]))
 
-            fs.writeFileSync(path.resolve(location, 'Big-Head', 'config', 'global.config.js'), global)
-            fs.writeFileSync(path.resolve(location, 'Big-Head', 'config', 'routes.config.js'), routes)
+            fs.writeFileSync(path.resolve(location, 'Big-Head-Console', 'config', 'global.config.js'), global)
+            fs.writeFileSync(path.resolve(location, 'Big-Head-Console', 'config', 'def.json'), JSON.stringify(routes))
 
             console.log(
                 'Step 5 - Installing dependencies....'
             )
 
-            exec('npm install', {cwd: path.resolve(location, 'Big-Head')}, function (err, stdout, stderr) {
+            exec('npm install', {cwd: path.resolve(location, 'Big-Head-Console')}, function (err, stdout, stderr) {
+                if (err) {
+                    console.error('Error at installing dependencies please execute manually', err)
+                }
+                console.log('Install complete!! . Run the project using npm start ')
+            })
+
+        } catch (e) {
+            console.error(
+                'An error has been ocurred'
+            )
+            console.error(e)
+            return
+        }
+    })
+
+
+program
+    .command('service')
+    .description('Creates new project of APIed-Piper based on config file')
+    .option('-d, --definition <definition...>', 'The full file folder and path of definition JSON. Mandatory ** ')
+    .option('-l, --location <location...>', 'The full file folder and path where the project will be created. Default: ./  ')
+    .option('-b, --base <base...>', 'APIed-Piper base path server. Default: /api/ ')
+    .option('-p, --port <port...>', 'Port where Big-Head will run. Default: 3000 ')
+    .option('-m, --mdb_uri <mdb_uri...>', 'The MongoDB URI to store data . Default: mongodb://localhost:27017/apied_piper ')
+    .option('-u, --user <user...>', 'Admin User by default. Default: PIED ')
+    .option('-pw, --password <password...>', 'Admin Password by default. Default: HBO_Sillicon33')
+    .action(async function ({definition, location, base, port, mdb_uri, user, password}) {
+
+        console.log(`
+Welcome to        
+  ____  _             _   _                _            ____ _     ___ 
+ | __ )(_) __ _      | | | | ___  __ _  __| |          / ___| |   |_ _|
+ |  _ \\| |/ _\` |_____| |_| |/ _ \\/ _\` |/ _\` |  _____  | |   | |    | | 
+ | |_) | | (_| |_____|  _  |  __/ (_| | (_| | |_____| | |___| |___ | | 
+ |____/|_|\\__, |     |_| |_|\\___|\\__,_|\\__,_|          \\____|_____|___|
+          |___/                                                        
+                                        (c) 2021-2022 leganux.net                                                         
+        `)
+
+        try {
+            if (!definition) {
+                console.log(
+                    'the definition option is mandatory'
+                )
+                return
+            }
+
+            if (!base) {
+                base = '/api/'
+            }
+            if (!mdb_uri) {
+                mdb_uri = 'mongodb://localhost:27017/apied_piper'
+            }
+            if (!user) {
+                user = 'PIED'
+            }
+            if (!password) {
+                password = 'HBO_Sillicon33'
+            }
+            if (!port) {
+                port = 3000
+            }
+            if (!location) {
+                location = path.join('./')
+            } else {
+                location = path.join(location)
+            }
+            console.log(
+                'Step 1 - Verifying if location exists....'
+            )
+            if (fs.existsSync(location)) {
+                console.log(
+                    'Step 1.5 - Folder exists....'
+                )
+            } else {
+                console.log(
+                    'Step 1.5 - Folder does`t exists.... Creating...'
+                )
+                location = await makeDir(location);
+                if (!fs.existsSync(location)) {
+                    console.log(
+                        'We can`t create dir. Please make it manually'
+                    )
+                    return
+                }
+            }
+
+            console.log(
+                'Step 2 - Creating default server conf and ACL....'
+            )
+
+
+            let definition_ = require(path.join(definition[0]))
+
+            let acl = {
+                Admin: {}
+            }
+
+            for (var [key, value] of Object.entries(definition_)) {
+                acl.Admin[key] = '*'
+
+            }
+
+
+            console.log(
+                'Step 3 - Copying files....'
+            )
+
+            copyRecursiveSync(path.resolve(__dirname, 'template_server'), path.resolve(location, 'apied_piper_server'))
+
+            console.log(
+                'Step 4 - Creating config files....'
+            )
+
+            let global = `module.exports = {
+    port: "${port}",
+    base_path: "${base}",
+    db_uri: "${mdb_uri}",
+    user: '${user}',
+    pass: '${password}',
+
+}`
+
+            let def = require(path.resolve(definition[0]))
+
+            fs.writeFileSync(path.resolve(location, 'apied_piper_server', 'config', 'global.config.js'), global)
+            fs.writeFileSync(path.resolve(location, 'apied_piper_server', 'config', 'acl.json'), JSON.stringify(acl))
+            fs.writeFileSync(path.resolve(location, 'apied_piper_server', 'config', 'def.json'), JSON.stringify(def))
+
+            console.log(
+                'Step 5 - Installing dependencies....'
+            )
+
+            exec('npm install', {cwd: path.resolve(location, 'apied_piper_server')}, function (err, stdout, stderr) {
                 if (err) {
                     console.error('Error at installing dependencies please execute manually', err)
                 }

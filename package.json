@@ -1,6 +1,6 @@
 {
   "name": "big-head",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A control panel generator for APIed-Piper",
   "main": "index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Routes = require('./config/routes.config')
+const Routes = require('./config/def.json')
 const Global = require('./config/global.config')
 const Assets = require('./config/assets.config')
 
