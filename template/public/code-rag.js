@@ -239,6 +239,7 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
                 if (saveInLocalStorage) {
                     try {
                         localStorage.setItem('code-rag-token', el.token)
+                        localStorage.setItem('code-rag-user', JSON.stringify(resp.data.user))
                     } catch (e) {
                     }
 
@@ -246,7 +247,125 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             }
             return resp
         } catch (e) {
-            console.error('weeey ya', e)
+            console.error('Login error', e)
+            throw e
+        }
+
+    }
+    this.verify = async function (token) {
+        let el = this
+        let method = 'POST'
+        let token_ = ''
+        try {
+            token_ = localStorage.getItem('code-rag-token')
+        } catch (e) {
+
+        }
+        try {
+
+            token_ = token_ || token
+            if (!token_) {
+                throw new Error('Token undefined')
+
+            }
+
+            if (token_.includes('Bearer')) {
+                token_ = token_.replace('Bearer ', '')
+            }
+
+            let resp = await el.executor(method, undefined, 'verify', {token: token_}, undefined)
+            if (resp.success) {
+                let user = resp.data.user
+                user = JSON.stringify(user)
+                try {
+                    localStorage.setItem('code-rag-user', user)
+
+                } catch (e) {
+
+                }
+            }
+            return resp
+        } catch (e) {
+            console.error('token error', e)
+            throw e
+        }
+
+    }
+
+    this.register = async function (role, data = {}) {
+
+        if (!data.user || !data.pass || !data.email || data.user.trim() == '' || data.pass.trim() == '' || data.email.trim() == '') {
+            throw  new Error('Be sure user, email and pass is added')
+        }
+        if (!data.email.includes('@') || !data.email.includes('.')) {
+
+            throw  new Error('Invalid mail format')
+        }
+        if (data.pass.length < 8) {
+            throw  new Error('Password must be al least 8 characters')
+        }
+        let el = this
+        let method = 'POST'
+        try {
+            let resp = await el.executor(method, undefined, 'register/' + role, data, undefined)
+            if (resp.success) {
+                console.log('Register success')
+                return true
+            }
+            return resp
+        } catch (e) {
+            console.error('we,can not register user', e)
+            throw e
+        }
+
+    }
+    this.forgotPassword = async function (email = '') {
+
+        let el = this
+        if (!email.includes('@') || !email.includes('.')) {
+
+            throw  new Error('Invalid mail format')
+        }
+
+        let method = 'POST'
+        try {
+            let resp = await el.executor(method, undefined, 'forgotPassword/', {email}, undefined)
+            if (resp.success) {
+                console.log('Email send correctly')
+                return true
+            }
+            return resp
+        } catch (e) {
+            console.error('we,can not send mail to  user', e)
+            throw e
+        }
+
+    }
+    this.new_password = async function (email = '', password = '', password2 = '', code = '') {
+
+        let el = this
+        if (!email.includes('@') || !email.includes('.')) {
+            throw  new Error('Invalid mail format')
+        }
+        if (password.length < 8) {
+            throw  new Error('Password must be al least 8 characters')
+        }
+        if (password2 !== password) {
+            throw  new Error('Passwords do not match')
+        }
+
+        let method = 'POST'
+        try {
+            return await el.executor(method, undefined, 'new_password/', {}, {
+                email,
+                password,
+                password2,
+                code
+            })
+
+
+        } catch (e) {
+            console.error('we,can not send mail to  user', e)
             throw e
         }
 
