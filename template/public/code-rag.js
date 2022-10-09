@@ -7,7 +7,6 @@ try {
 
 
 let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/", options = {}) {
-
     console.log(`
     Welcome to 
          ____ ____ ____ ____ ____ ____ ____ ____ 
@@ -18,14 +17,12 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             ______________________________________
       Read the docs at https://www.npmjs.com/package/code-rag-sdk
     `)
-
     this.host_uri = host_uri
     this.api_base = api_base
     this.options = options
     this.furi = host_uri + api_base
     this.token = 'Bearer NONE'
     this.acl = 'OPEN'
-
     this.routes = {}
     this.hasBeenDiscovered = false
     this.presentAuth = false
@@ -33,12 +30,9 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
     this.f_error = function (e) {
         console.error('An error has been occurred', e)
     }
-
     if (options.f_error && typeof options.f_error == 'function') {
         this.f_error = options.f_error
     }
-
-
     this.parseQuery = function (params) {
         let result = '';
 
@@ -67,7 +61,6 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
         convertJsonToQueryString(params);
         return result;
     };
-
     this.executor = async function (method = 'GET', headers = {}, path = '', body = {}, query = {v__: Math.random()}) {
         let el = this
         let response = {}
@@ -121,16 +114,18 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
 
                 switch (method.toUpperCase()) {
                     case 'POST':
-
+                        console.log('entra')
 
                         response = await fetch(url, {
                             method: 'POST',
                             headers,
                             body: JSON.stringify(body),
                         })
-
-
-                        response = await response.json()
+                        if (response.ok) {
+                            response = response.json()
+                        } else {
+                            response = Promise.reject(response);
+                        }
 
 
                         break;
@@ -140,7 +135,11 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
                             headers
 
                         })
-                        response = await response.json()
+                        if (response.ok) {
+                            response = response.json()
+                        } else {
+                            response = Promise.reject(response);
+                        }
 
                         break;
                     case 'PUT':
@@ -149,7 +148,11 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
                             headers,
                             body: JSON.stringify(body),
                         })
-                        response = await response.json()
+                        if (response.ok) {
+                            response = response.json()
+                        } else {
+                            response = Promise.reject(response);
+                        }
 
                         break;
                     case 'DELETE':
@@ -158,7 +161,11 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
                             headers,
                             body: JSON.stringify(body),
                         })
-                        response = await response.json()
+                        if (response.ok) {
+                            response = response.json()
+                        } else {
+                            response = Promise.reject(response);
+                        }
 
                         break;
                     case 'OPTIONS':
@@ -167,8 +174,11 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
                             headers,
                             body: JSON.stringify(body),
                         })
-                        response = await response.json()
-
+                        if (response.ok) {
+                            response = response.json()
+                        } else {
+                            response = Promise.reject(response);
+                        }
                         break;
                     case 'PATCH':
                         response = await fetch(url, {
@@ -176,22 +186,25 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
                             headers,
                             body: JSON.stringify(body),
                         })
-                        response = await response.json()
-
+                        if (response.ok) {
+                            response = response.json()
+                        } else {
+                            response = Promise.reject(response);
+                        }
                         break;
-
                 }
-                return response
+                return await response
             }
 
-
         } catch (e) {
-
+            if (e.status == 403) {
+                console.log('Close session')
+                el.logout()
+            }
             el.f_error(e)
             throw e
         }
     }
-
     this.discover = async function () {
         let el = this
         try {
@@ -226,13 +239,17 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             throw e
         }
     }
-
-
-    this.login = async function (password = '', user = '', saveInLocalStorage = true) {
+    this.login = async function ($password_ = '', $user_ = '', saveInLocalStorage = true) {
         let el = this
         let method = 'POST'
+
+        let body = {
+            user: $user_,
+            pass: $password_
+        }
+
         try {
-            let resp = await el.executor(method, undefined, 'login', {user: user, pass: password}, undefined)
+            let resp = await el.executor(method, undefined, 'login', body, undefined)
             if (resp.success) {
                 el.token = 'Bearer ' + resp.data.token
                 el.presentAuth = true
@@ -242,7 +259,6 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
                         localStorage.setItem('code-rag-user', JSON.stringify(resp.data.user))
                     } catch (e) {
                     }
-
                 }
             }
             return resp
@@ -291,7 +307,6 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
         }
 
     }
-
     this.register = async function (role, data = {}) {
 
         if (!data.user || !data.pass || !data.email || data.user.trim() == '' || data.pass.trim() == '' || data.email.trim() == '') {
@@ -376,12 +391,10 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
         if (removeFromLocalStorage) {
             try {
                 localStorage.removeItem('code-rag-token')
+                localStorage.removeItem('code-rag-user')
             } catch (e) {
-
             }
         }
-
-
     }
     this.resourceAccess = async function () {
         let el = this
@@ -390,7 +403,6 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             arr.push(key)
         }
         return arr
-
     }
     this.setResource = function (resource = false) {
         let el = this
@@ -400,7 +412,6 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
         return el
 
     }
-
     this.createOne = async function (body = {}, query = {}) {
         let el = this
         let method = 'POST'
@@ -560,10 +571,7 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
 
     }
 }
-
 try {
     module.exports = codeRagSdk
 } catch (e) {
-
 }
-
