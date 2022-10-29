@@ -8,7 +8,7 @@ try {
 
 let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/", options = {}) {
     console.log(`
-    Welcome to 
+    Welcome to v1.1.0
          ____ ____ ____ ____ ____ ____ ____ ____ 
          ||C |||O |||D |||E |||- |||R |||A |||G ||  == SDK ==
          ||__|||__|||__|||__|||__|||__|||__|||__||
@@ -27,6 +27,17 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
     this.hasBeenDiscovered = false
     this.presentAuth = false
     this.resource = false
+
+
+    try {
+        if (localStorage.getItem('code-rag-token')) {
+            this.token = localStorage.getItem('code-rag-token')
+            this.presentAuth = true
+        }
+    } catch (e) {
+
+    }
+
     this.f_error = function (e) {
         console.error('An error has been occurred', e)
     }
@@ -216,14 +227,6 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             }
             el.hasBeenDiscovered = true
 
-            try {
-                if (localStorage.getItem('code-rag-token')) {
-                    el.token = localStorage.getItem('code-rag-token')
-                    el.presentAuth = true
-                }
-            } catch (e) {
-
-            }
 
             return disc?.data
         } catch (e) {
@@ -434,7 +437,7 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             return
         }
         try {
-            let resp = await el.executor(method, undefined, el.resource, body, query)
+            let resp = await el.executor(method, undefined, el.resource + '/many', body, query)
             return resp
         } catch (e) {
 
@@ -464,7 +467,7 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             return
         }
         try {
-            let resp = await el.executor(method, undefined, el.resource, undefined, query)
+            let resp = await el.executor(method, undefined, el.resource + '/one', undefined, query)
             return resp
         } catch (e) {
 
@@ -494,7 +497,7 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             return
         }
         try {
-            let resp = await el.executor(method, undefined, el.resource, body, query)
+            let resp = await el.executor(method, undefined, el.resource + '/find_update_or_create', body, query)
             return resp
         } catch (e) {
 
@@ -509,7 +512,7 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
             return
         }
         try {
-            let resp = await el.executor(method, undefined, el.resource, body, query)
+            let resp = await el.executor(method, undefined, el.resource + '/find_where_and_update', body, query)
             return resp
         } catch (e) {
 
@@ -550,7 +553,7 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
     }
     this.datatableAJAX = async function () {
         let el = this
-        let method = 'DELETE'
+
         if (!el.resource) {
             throw new Error('Resource not selected')
             return
@@ -563,6 +566,50 @@ let codeRagSdk = function (host_uri = 'http://localhost:3000/', api_base = "api/
                 "beforeSend": function (xhr) {
                     xhr.setRequestHeader('authorization', el.token);
                 },
+                error: function (xhr, error, thrown) {
+                    console.log(xhr)
+                    if (xhr.status == '403') {
+                        el.logout()
+                        if (typeof el.f_error == 'function') {
+                            el.f_error(xhr)
+                        }
+
+                    }
+                },
+
+            }
+        } catch (e) {
+
+            throw e
+        }
+
+    }
+    this.datatable_agr_AJAX = async function (data) {
+        let el = this
+        if (!el.resource) {
+            throw new Error('Resource not selected')
+            return
+        }
+        try {
+            return {
+                url: el.furi + el.resource + '/dt_agr/',
+                type: "POST",
+                data:{},
+                "dataType": 'json',
+                "beforeSend": function (xhr) {
+                    xhr.setRequestHeader('authorization', el.token);
+                },
+                error: function (xhr, error, thrown) {
+                    console.log(xhr)
+                    if (xhr.status == '403') {
+                        el.logout()
+                        if (typeof el.f_error == 'function') {
+                            el.f_error(xhr)
+                        }
+
+                    }
+                },
+
             }
         } catch (e) {
 

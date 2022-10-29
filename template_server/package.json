@@ -10,6 +10,6 @@
   "author": "Angel Erick Cruz Olivera",
   "license": "ISC",
   "dependencies": {
-    "apied-piper": "^3.1.2"
+    "apied-piper": "^3.1.6"
   }
 }
