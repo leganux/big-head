@@ -44,7 +44,7 @@ Welcome to
  |____/|_|\\__, |     |_| |_|\\___|\\__,_|\\__,_|          \\____|_____|___|
           |___/                                                        
                                         (c) 2021-2022 leganux.net                                                         
-     v1.1.1   `)
+     v1.1.3   `)
 
         try {
             if (!definition) {
@@ -63,9 +63,12 @@ Welcome to
             if (!port) {
                 port = 3333
             }
-            if (!location) {
+            if (!location || location.length == 0) {
                 location = path.join('./')
             } else {
+                if (Array.isArray(location)) {
+                    location = location[0]
+                }
                 location = path.join(location)
             }
             console.log(
@@ -200,9 +203,12 @@ Welcome to
             if (!port) {
                 port = 3000
             }
-            if (!location) {
+            if (!location || location.length == 0) {
                 location = path.join('./')
             } else {
+                if (Array.isArray(location)) {
+                    location = location[0]
+                }
                 location = path.join(location)
             }
             console.log(
